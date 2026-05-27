@@ -1,97 +1,113 @@
 # Insight Whisper Desktop
 
-Десктопное приложение для транскрибации аудиозвонков и AI-анализа качества работы менеджеров.
+Десктопное приложение для транскрибации аудиозвонков и AI-анализа качества работы менеджеров. Полная локальная замена Lovable-версии — без облака, без Supabase.
 
 ## Возможности
 
-- **Транскрибация аудио** — через OpenAI Whisper или Google Gemini
-- **AI-анализ звонков** — через 5 провайдеров (Google, OpenAI, DeepSeek, Anthropic, Qwen)
-- **Пользовательские инструкции** — загрузка критериев оценки из текстовых файлов
-- **Пакетная обработка** — загрузка нескольких файлов с паузой между ними
-- **Экспорт результатов** — в Excel (.xlsx) и JSON
-- **Тёмная/светлая тема**
-- **Автосохранение результатов**
+### Анализ
+- **Транскрибация** — OpenAI Whisper или Google Gemini
+- **AI-анализ** — 5 провайдеров: Google, OpenAI, DeepSeek, Anthropic, Qwen
+- **Пользовательские инструкции** — критерии оценки из текстовых файлов
+- **Пакетная обработка** с настраиваемой паузой между файлами
 
-## Быстрый старт (без сборки в .exe)
+### Интерфейс (6 вкладок)
+- **Загрузка** — добавление файлов, выбор менеджера, запуск анализа
+- **Дашборд** — KPI-карточки, графики динамики и распределений
+- **История** — все звонки с фильтрами по дате/менеджеру/типу/статусу + поиск
+- **Менеджеры** — управление списком сотрудников
+- **Инструкции** — создание/редактирование критериев оценки
+- **Настройки** — провайдеры, модели, API-ключи, тема
+
+### Экспорт
+- **PDF** — детальный отчёт по звонку (с кириллицей)
+- **PDF сводный** — отчёт по группе звонков со статистикой
+- **Excel** — таблица всех данных
+- **JSON** — для интеграций
+
+### Дополнительно
+- Локальная **SQLite** база — хранит всю историю
+- **Повторный анализ** прямо в окне детального просмотра
+- **Тёмная/светлая** тема
+- **Двойной клик** на звонке — открывает детали
+
+---
+
+## Быстрый старт (без сборки .exe)
 
 ### 1. Установите Python 3.10+
-
-Скачайте с [python.org](https://www.python.org/downloads/)
+[python.org/downloads](https://www.python.org/downloads/) — обязательно поставьте галочку **"Add Python to PATH"**
 
 ### 2. Установите зависимости
-
 ```bash
 pip install -r requirements.txt
 ```
 
 ### 3. Запустите
-
 ```bash
 python app.py
 ```
 
-### 4. Настройте API ключи
+### 4. Получите API ключ Google (бесплатно)
+1. [aistudio.google.com/apikey](https://aistudio.google.com/apikey)
+2. **Create API Key**
+3. В программе → Настройки → вставьте в **Google API Key** → Сохранить
 
-Перейдите во вкладку **Настройки** и введите API ключ выбранного провайдера:
-- **Google Gemini** (рекомендуется): [aistudio.google.com](https://aistudio.google.com/apikey)
-- **OpenAI**: [platform.openai.com](https://platform.openai.com/api-keys)
-- **DeepSeek**: [platform.deepseek.com](https://platform.deepseek.com/)
-- **Anthropic**: [console.anthropic.com](https://console.anthropic.com/)
-- **Qwen**: [dashscope.console.aliyun.com](https://dashscope.console.aliyun.com/)
+---
 
 ## Сборка в .exe
 
-### Windows:
+### Windows
+Двойной клик по `build.bat` — готово, файл будет в `dist\InsightWhisper.exe`
 
-```
-build.bat
-```
-
-Или вручную:
+### Linux/macOS
 ```bash
-pip install pyinstaller
-pyinstaller --noconfirm --onefile --windowed --name "InsightWhisper" --hidden-import customtkinter --hidden-import openpyxl --collect-all customtkinter app.py
+chmod +x build.sh && ./build.sh
 ```
 
-Готовый файл будет в папке `dist/InsightWhisper.exe`
-
-### Linux/macOS:
-
-```bash
-chmod +x build.sh
-./build.sh
-```
-
-## Структура проекта
-
-```
-insight-whisper-desktop/
-├── app.py              # Главный файл с GUI
-├── config.py           # Модуль конфигурации
-├── transcriber.py      # Модуль транскрибации
-├── analyzer.py         # Модуль AI-анализа
-├── requirements.txt    # Зависимости Python
-├── build.bat           # Скрипт сборки Windows
-├── build.sh            # Скрипт сборки Linux/Mac
-└── README.md           # Документация
-```
+---
 
 ## Как пользоваться
 
-1. **Настройки** — введите API ключ, выберите провайдера и модель
-2. **Инструкции** — создайте или загрузите инструкцию с критериями оценки
-3. **Загрузка** — выберите аудиофайлы, укажите менеджера, нажмите "Начать анализ"
-4. **Результаты** — просмотрите оценки, экспортируйте в Excel
+1. **Менеджеры** — добавьте сотрудников
+2. **Инструкции** — создайте инструкцию с критериями оценки
+3. **Настройки** — выберите провайдера и введите API-ключ
+4. **Загрузка** — выберите менеджера, добавьте аудиофайлы, нажмите "Начать анализ"
+5. **Дашборд** — смотрите статистику, графики
+6. **История** — фильтруйте, экспортируйте PDF/Excel, открывайте детали двойным кликом
 
-## Поддерживаемые аудио-форматы
+---
+
+## Структура файлов
+
+```
+insight-whisper-desktop/
+├── app.py              # Главный модуль с GUI
+├── config.py           # Настройки и инструкции
+├── database.py         # SQLite — менеджеры, звонки
+├── transcriber.py      # Транскрибация
+├── analyzer.py         # AI-анализ (5 провайдеров)
+├── pdf_export.py       # Экспорт в PDF
+├── ui_history.py       # Вкладка истории
+├── ui_dashboard.py     # Вкладка дашборда
+├── ui_managers.py      # Вкладка менеджеров
+├── ui_call_detail.py   # Окно деталей звонка
+├── requirements.txt    # Зависимости
+├── build.bat           # Сборка Windows
+├── build.sh            # Сборка Linux/Mac
+└── README.md
+```
+
+## Где хранятся данные
+
+Все данные локально, в папке пользователя:
+- **Конфиг:** `~/.insight-whisper/config.json`
+- **БД:** `~/.insight-whisper/insight_whisper.db`
+- **Инструкции:** `~/.insight-whisper/instructions/`
+- **Резервные копии результатов:** `~/.insight-whisper/results/`
+
+## Поддерживаемые форматы
 
 mp3, wav, m4a, ogg, oga, aac, flac, webm, mp4, opus, amr, 3gp
-
-## Конфигурация
-
-Настройки хранятся в: `~/.insight-whisper/config.json`
-Инструкции: `~/.insight-whisper/instructions/`
-Результаты: `~/.insight-whisper/results/`
 
 ## Модели по умолчанию
 
@@ -103,4 +119,4 @@ mp3, wav, m4a, ogg, oga, aac, flac, webm, mp4, opus, amr, 3gp
 | Anthropic | — | claude-3-5-sonnet-latest |
 | Qwen      | — | qwen-plus |
 
-> DeepSeek, Anthropic и Qwen не поддерживают транскрибацию аудио, только анализ текста.
+> DeepSeek, Anthropic, Qwen не поддерживают транскрибацию аудио — только анализ текста.
