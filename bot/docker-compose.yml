@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  bot:
+    build: .
+    container_name: tihiy-vecher-bot
+    restart: always
+    env_file: .env
+    volumes:
+      - ./data:/app/data
+      - ./content:/app/content
+    # Webhook-сервер для платежей (Phase 4)
+    # ports:
+    #   - "8000:8000"
